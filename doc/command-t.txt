@@ -785,6 +785,10 @@ Following is a list of all available options:
         Git isn't available or the path being searched is not inside a Git
         repository falls back to "find".
 
+	  - "svn": uses `svn ls -R` to produce a list of files; when Subversion
+		isn't available or the path being searched is not inside a Subversion
+		repository falls back to "find".
+
       - "watchman": uses Watchman (https://github.com/facebook/watchman) if
         available; otherwise falls back to "find". Note that this scanner is
         intended for use with very large hierarchies (hundreds of thousands of
