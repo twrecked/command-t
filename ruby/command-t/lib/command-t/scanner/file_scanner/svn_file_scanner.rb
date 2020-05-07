@@ -6,16 +6,18 @@ require 'open3'
 module CommandT
   class Scanner
     class FileScanner
-      # A FileScanner which shells out to the `find` executable in order to scan.
-      class SVNFileScanner < FileScanner
-        include PathUtilities
+      # Uses svn ls -R to scan for files
+      class SVNFileScanner < FindFileScanner
+        LsFilesError = Class.new(::RuntimeError)
 
         def paths!
           Dir.chdir(@path) do
-            command = %w[svn ls -R @path]
+            command = %w[svn ls -R]
+            all_files = list_files(command)
 
             filtered = all_files.
               map { |path| path.chomp }.
+              reject { |path| path.end_with?("/") }.
               reject { |path| path_excluded?(path, 0) }
             truncated = filtered.take(@max_files)
             if truncated.count < filtered.count
